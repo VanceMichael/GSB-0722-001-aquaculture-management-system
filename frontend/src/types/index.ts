@@ -48,6 +48,29 @@ export interface FeedingRecord {
   created_at: string;
 }
 
+export interface FeedingPlan {
+  id: number;
+  batch_id: number;
+  plan_date: string;
+  planned_quantity: number;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FeedingDeviationAlert {
+  plan_id: number;
+  batch_id: number;
+  batch_number: string;
+  plan_date: string;
+  planned_quantity: number;
+  actual_quantity: number;
+  deviation_amount: number;
+  deviation_percent: number;
+  is_alert: boolean;
+  is_pending: boolean;
+}
+
 export interface WaterQualityRecord {
   id: number;
   batch_id: number;
