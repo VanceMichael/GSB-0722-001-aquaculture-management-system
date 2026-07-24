@@ -2,13 +2,14 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Fish, Droplets, Pill, DollarSign, 
-  TrendingUp, Plus, Search, Menu, X
+  TrendingUp, Plus, Search, Menu, X, Calendar
 } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import Ponds from './pages/Ponds';
 import Batches from './pages/Batches';
 import StockingRecords from './pages/StockingRecords';
 import FeedingRecords from './pages/FeedingRecords';
+import FeedingPlans from './pages/FeedingPlans';
 import WaterQuality from './pages/WaterQuality';
 import MedicationRecords from './pages/MedicationRecords';
 import CostRecords from './pages/CostRecords';
@@ -25,6 +26,7 @@ const Sidebar: React.FC = () => {
     { path: '/batches', icon: Fish, label: '批次管理' },
     { path: '/stocking', icon: Plus, label: '投苗记录' },
     { path: '/feeding', icon: Search, label: '投喂记录' },
+    { path: '/feeding-plans', icon: Calendar, label: '投喂计划' },
     { path: '/water-quality', icon: Droplets, label: '水质监测' },
     { path: '/medication', icon: Pill, label: '用药记录' },
     { path: '/costs', icon: DollarSign, label: '成本核算' },
@@ -90,6 +92,7 @@ const App: React.FC = () => {
             <Route path="/batches" element={<Batches />} />
             <Route path="/stocking" element={<StockingRecords />} />
             <Route path="/feeding" element={<FeedingRecords />} />
+            <Route path="/feeding-plans" element={<FeedingPlans />} />
             <Route path="/water-quality" element={<WaterQuality />} />
             <Route path="/medication" element={<MedicationRecords />} />
             <Route path="/costs" element={<CostRecords />} />
