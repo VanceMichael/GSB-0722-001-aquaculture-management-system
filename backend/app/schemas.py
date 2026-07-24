@@ -339,3 +339,36 @@ class BatchTraceability(BaseModel):
     medication_records: List[MedicationRecordTrace] = []
     cost_records: List[CostRecordTrace] = []
     harvest_sales: List[HarvestSaleTrace] = []
+
+class FeedingPlanBase(BaseModel):
+    batch_id: int
+    plan_date: date
+    planned_quantity_kg: float
+    notes: Optional[str] = None
+
+class FeedingPlanCreate(FeedingPlanBase):
+    pass
+
+class FeedingPlanUpdate(BaseModel):
+    batch_id: Optional[int] = None
+    plan_date: Optional[date] = None
+    planned_quantity_kg: Optional[float] = None
+    notes: Optional[str] = None
+
+class FeedingPlanResponse(FeedingPlanBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
+class FeedingAlert(BaseModel):
+    plan_id: int
+    batch_id: int
+    plan_date: date
+    planned_quantity_kg: float
+    actual_quantity_kg: float
+    deviation_pct: Optional[float] = None
+    is_alert: bool
+    notes: Optional[str] = None

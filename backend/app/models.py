@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Date, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Float, Date, DateTime, ForeignKey, Text, UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from .database import Base
@@ -34,6 +34,7 @@ class Batch(Base):
     pond = relationship("Pond", back_populates="batches")
     stocking_records = relationship("StockingRecord", back_populates="batch")
     feeding_records = relationship("FeedingRecord", back_populates="batch")
+    feeding_plans = relationship("FeedingPlan", back_populates="batch")
     water_quality_records = relationship("WaterQualityRecord", back_populates="batch")
     medication_records = relationship("MedicationRecord", back_populates="batch")
     cost_records = relationship("CostRecord", back_populates="batch")
@@ -141,3 +142,19 @@ class HarvestSale(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     batch = relationship("Batch", back_populates="harvest_sales")
+
+class FeedingPlan(Base):
+    __tablename__ = "feeding_plans"
+    __table_args__ = (
+        UniqueConstraint("batch_id", "plan_date", name="uq_feeding_plan_batch_date"),
+    )
+
+    id = Column(Integer, primary_key=True, index=True)
+    batch_id = Column(Integer, ForeignKey("batches.id"), nullable=False)
+    plan_date = Column(Date, nullable=False, comment="计划投喂日期")
+    planned_quantity_kg = Column(Float, nullable=False, comment="计划投喂量(公斤)")
+    notes = Column(Text, comment="备注")
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    batch = relationship("Batch", back_populates="feeding_plans")

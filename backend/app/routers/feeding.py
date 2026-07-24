@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
+from datetime import date
 from ..database import get_db
 from ..models import FeedingRecord, Batch
 from ..schemas import FeedingRecordCreate, FeedingRecordUpdate, FeedingRecordResponse
@@ -23,10 +24,18 @@ def create_feeding_record(record: FeedingRecordCreate, db: Session = Depends(get
     return new_record
 
 @router.get("/", response_model=List[FeedingRecordResponse])
-def get_feeding_records(skip: int = 0, limit: int = 100, batch_id: int = None, db: Session = Depends(get_db)):
+def get_feeding_records(
+    skip: int = 0,
+    limit: int = 100,
+    batch_id: int = None,
+    feeding_date: Optional[date] = None,
+    db: Session = Depends(get_db),
+):
     query = db.query(FeedingRecord)
     if batch_id:
         query = query.filter(FeedingRecord.batch_id == batch_id)
+    if feeding_date is not None:
+        query = query.filter(FeedingRecord.feeding_date == feeding_date)
     records = query.offset(skip).limit(limit).all()
     return records
 
