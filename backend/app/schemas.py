@@ -116,6 +116,40 @@ class FeedingRecordResponse(FeedingRecordBase):
     class Config:
         orm_mode = True
 
+class FeedingPlanBase(BaseModel):
+    batch_id: int
+    plan_date: date
+    planned_quantity: float
+    notes: Optional[str] = None
+
+class FeedingPlanCreate(FeedingPlanBase):
+    pass
+
+class FeedingPlanUpdate(BaseModel):
+    batch_id: Optional[int] = None
+    plan_date: Optional[date] = None
+    planned_quantity: Optional[float] = None
+    notes: Optional[str] = None
+
+class FeedingPlanResponse(FeedingPlanBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
+class FeedingDeviationAlert(BaseModel):
+    batch_id: int
+    batch_number: str
+    plan_date: date
+    planned_quantity: float
+    actual_quantity: float
+    deviation: float
+    deviation_ratio: float
+    threshold: float
+    direction: str
+
 class WaterQualityRecordBase(BaseModel):
     batch_id: int
     record_date: date

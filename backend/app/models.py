@@ -34,6 +34,7 @@ class Batch(Base):
     pond = relationship("Pond", back_populates="batches")
     stocking_records = relationship("StockingRecord", back_populates="batch")
     feeding_records = relationship("FeedingRecord", back_populates="batch")
+    feeding_plans = relationship("FeedingPlan", back_populates="batch")
     water_quality_records = relationship("WaterQualityRecord", back_populates="batch")
     medication_records = relationship("MedicationRecord", back_populates="batch")
     cost_records = relationship("CostRecord", back_populates="batch")
@@ -70,6 +71,19 @@ class FeedingRecord(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     batch = relationship("Batch", back_populates="feeding_records")
+
+class FeedingPlan(Base):
+    __tablename__ = "feeding_plans"
+
+    id = Column(Integer, primary_key=True, index=True)
+    batch_id = Column(Integer, ForeignKey("batches.id"), nullable=False)
+    plan_date = Column(Date, nullable=False, comment="计划投喂日期")
+    planned_quantity = Column(Float, nullable=False, comment="计划投喂量(公斤)")
+    notes = Column(Text, comment="备注")
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    batch = relationship("Batch", back_populates="feeding_plans")
 
 class WaterQualityRecord(Base):
     __tablename__ = "water_quality_records"
