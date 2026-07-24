@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
-from .routers import ponds, batches, stocking, feeding, water_quality, medication, costs, harvest, analysis
+from .routers import ponds, batches, stocking, feeding, feeding_plans, water_quality, medication, costs, harvest, analysis
 
 Base.metadata.create_all(bind=engine)
 
@@ -23,6 +23,7 @@ app.include_router(ponds.router)
 app.include_router(batches.router)
 app.include_router(stocking.router)
 app.include_router(feeding.router)
+app.include_router(feeding_plans.router)
 app.include_router(water_quality.router)
 app.include_router(medication.router)
 app.include_router(costs.router)
