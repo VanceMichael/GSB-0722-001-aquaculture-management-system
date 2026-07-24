@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type {
-  Pond, Batch, StockingRecord, FeedingRecord, WaterQualityRecord,
+  Pond, Batch, StockingRecord, FeedingRecord, FeedingPlan, FeedingAlert, WaterQualityRecord,
   MedicationRecord, CostRecord, HarvestSale, CultureCycleAnalysis,
   CostSummary, FeedingSummary, BatchTraceability
 } from '../types';
@@ -50,16 +50,28 @@ export const stockingRecordApi = {
 };
 
 export const feedingRecordApi = {
-  getAll: (batchId?: number) => 
-    api.get<FeedingRecord[]>('/feeding-records/', { 
-      params: batchId ? { batch_id: batchId } : {} 
-    }),
+  getAll: (params?: { batch_id?: number; feeding_date?: string }) =>
+    api.get<FeedingRecord[]>('/feeding-records/', { params }),
   getById: (id: number) => api.get<FeedingRecord>(`/feeding-records/${id}/`),
   create: (data: Omit<FeedingRecord, 'id' | 'created_at'>) => 
     api.post<FeedingRecord>('/feeding-records/', data),
   update: (id: number, data: Partial<FeedingRecord>) => 
     api.put<FeedingRecord>(`/feeding-records/${id}/`, data),
   delete: (id: number) => api.delete(`/feeding-records/${id}/`),
+};
+
+export const feedingPlanApi = {
+  getAll: (params?: { batch_id?: number; plan_date?: string }) =>
+    api.get<FeedingPlan[]>('/feeding-plans/', { params }),
+  getById: (id: number) => api.get<FeedingPlan>(`/feeding-plans/${id}/`),
+  create: (data: Omit<FeedingPlan, 'id' | 'created_at' | 'updated_at'>) =>
+    api.post<FeedingPlan>('/feeding-plans/', data),
+  update: (id: number, data: Partial<FeedingPlan>) =>
+    api.put<FeedingPlan>(`/feeding-plans/${id}/`, data),
+  delete: (id: number) => api.delete(`/feeding-plans/${id}/`),
+  getAlerts: (params?: { batch_id?: number; plan_date?: string; only_alerts?: boolean }) =>
+    api.get<FeedingAlert[]>('/feeding-plans/alerts/', { params }),
+  getAlertForPlan: (id: number) => api.get<FeedingAlert>(`/feeding-plans/${id}/alert/`),
 };
 
 export const waterQualityRecordApi = {
